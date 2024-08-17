@@ -1,4 +1,4 @@
-from tkinter import W
+
 import RPi.GPIO as GPIO
 import time
 import sys
