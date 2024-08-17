@@ -491,6 +491,7 @@ def testAllSensors():
     sensorPack = SensorPack();
 
     while True:
+        time.sleep(1)
         sensorPack.test();
 
 def testBme():
