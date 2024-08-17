@@ -175,6 +175,10 @@ def testHackedServo(hackedServoPin):
     try:
         duty_cycle = angleToDutyCycle(130)
         pwm.ChangeDutyCycle(duty_cycle)
+        time.sleep(2)
+        duty_cycle = angleToDutyCycle(90)
+        pwm.ChangeDutyCycle(duty_cycle)
+        time.sleep(2)
 
     except KeyboardInterrupt:
         pass
