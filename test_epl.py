@@ -121,7 +121,7 @@ def run():
     inputPin = 27
     outputPin = 23
 
-    normalServoPin = 12
+    normalServoPin = 18
     detachmentAngle = 666
     defaultAngle = 90
 
