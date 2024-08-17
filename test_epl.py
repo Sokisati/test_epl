@@ -520,7 +520,8 @@ def run():
         testHackedServo(hackedServoPin)
 
     if sys.argv[1]=='all':
-        testAllSensors()
+        while True:
+            testAllSensors()
       
         
 run();
