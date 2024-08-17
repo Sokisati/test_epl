@@ -498,6 +498,7 @@ def testBme():
 
     while True:
         sensorPack.bme.test()
+        time.sleep(1)
         
 def testGps():
     
@@ -505,19 +506,19 @@ def testGps():
 
     while True:
         sensorPack.gps.test()           
-
+        time.sleep(1)
 def testMpu():
     sensorPack = SensorPack();
 
     while True:
         sensorPack.mpu.test()
-
+        time.sleep(1)
 def testRtc():
     timeSensor = TimeSensor()
 
     while True:
         timeSensor.test()
-
+        time.sleep(1)
 def run():
     
     validateArguments();
