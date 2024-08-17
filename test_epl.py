@@ -73,15 +73,57 @@ def testOutput(outputPin):
     finally:
         GPIO.cleanup()
 
+def testRange(normalServoPin):
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(normalServoPin, GPIO.OUT)
+
+    pwm = GPIO.PWM(normalServoPin, 50) 
+    pwm.start(0)         
+
+    def angleToDutyCycle(angle):
+        min_angle = 0
+        max_angle = 180
+        min_duty_cycle = 2
+        max_duty_cycle = 12
+    
+        if angle < min_angle:
+            angle = min_angle
+        elif angle > max_angle:
+            angle = max_angle
+
+        duty_cycle = ((angle - min_angle) / (max_angle - min_angle)) * (max_duty_cycle - min_duty_cycle) + min_duty_cycle
+        return duty_cycle
+
+    try:
+        while True:
+            for angle in range(0, 181):  
+                duty_cycle = angleToDutyCycle(angle)
+                pwm.ChangeDutyCycle(duty_cycle)
+                time.sleep(0.02) 
+
+            time.sleep(1)  
+
+            for angle in range(180, -1, -1):  
+                duty_cycle = angleToDutyCycle(angle)
+                pwm.ChangeDutyCycle(duty_cycle)
+                time.sleep(0.02)  
+
+            time.sleep(1)  
+
+    except KeyboardInterrupt:
+        pass
+
+    pwm.stop()
+    GPIO.cleanup()
 
 def run():
     
     inputPin = 27
     outputPin = 23
 
-    normalServoPin = 666
+    normalServoPin = 12
     detachmentAngle = 666
-    defaultAngle = 666
+    defaultAngle = 90
 
 
     hackedServoPin = 666
@@ -93,6 +135,9 @@ def run():
     
     if sys.argv[1]=='output':
         testOutput(outputPin)
+        
+    if sys.argv[1]=='range':
+        testRange(normalServoPin)
       
         
 run();
