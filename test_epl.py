@@ -85,9 +85,14 @@ def run():
 
 
     hackedServoPin = 666
+    
+
 
     if sys.argv[1]=='input':
         testInput(inputPin)
     
     if sys.argv[1]=='output':
         testOutput(outputPin)
+      
+        
+run();
