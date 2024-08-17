@@ -116,13 +116,49 @@ def testRange(normalServoPin):
     pwm.stop()
     GPIO.cleanup()
 
+def testDetachment(normalServoPin,defaultAngle,detachmentAngle):
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(normalServoPin, GPIO.OUT)
+
+    pwm = GPIO.PWM(normalServoPin, 50)  
+    pwm.start(0)            
+
+    def angleToDutyCycle(angle):
+        min_angle = 0
+        max_angle = 180
+        min_duty_cycle = 2
+        max_duty_cycle = 12
+    
+        if angle < min_angle:
+            angle = min_angle
+        elif angle > max_angle:
+            angle = max_angle
+
+        duty_cycle = ((angle - min_angle) / (max_angle - min_angle)) * (max_duty_cycle - min_duty_cycle) + min_duty_cycle
+        return duty_cycle
+
+    try:
+        duty_cycle = angleToDutyCycle(defaultAngle)
+        pwm.ChangeDutyCycle(duty_cycle)
+        time.sleep(2) 
+        duty_cycle = angleToDutyCycle(detachmentAngle)
+        pwm.ChangeDutyCycle(duty_cycle)
+        time.sleep(2) 
+
+    except KeyboardInterrupt:
+        pass
+
+    # Cleanup
+    pwm.stop()
+    GPIO.cleanup()
+
 def run():
     
     inputPin = 27
     outputPin = 23
 
     normalServoPin = 18
-    detachmentAngle = 666
+    detachmentAngle = 25
     defaultAngle = 90
 
 
@@ -138,6 +174,9 @@ def run():
         
     if sys.argv[1]=='range':
         testRange(normalServoPin)
+        
+    if sys.argv[1]=='detach':
+        testDetachment(normalServoPin,defaultAngle,detachmentAngle)
       
         
 run();
