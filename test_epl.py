@@ -30,7 +30,7 @@ class TimeSensor:
 
 class MPUSensor:
     def __init__(self, dt=1.0):
-
+        self.broken = False
         try:
 
             self.dt = dt  
@@ -51,6 +51,7 @@ class MPUSensor:
             self.calculateGyroBias()
             
         except Exception as e:
+            self.broken = True
             print("Problem with mpu creation")
 
     def calculateGyroBias(self):
@@ -99,6 +100,7 @@ class MPUSensor:
 
 class BMESensor:
     def __init__(self):
+        self.broken = False        
         try:
 
             try:
@@ -120,9 +122,14 @@ class BMESensor:
             self.altitude = None
         
         except Exception as e:
+            self.broken = True
             print("Problem with bme creation")
         
     def readSensorData(self):
+        
+        if self.broken:
+            return -666
+        
         try:
             if self.sensor.get_sensor_data():
                 self.temperature = self.sensor.data.temperature
@@ -135,6 +142,10 @@ class BMESensor:
         return False
 
     def getTemp(self):
+        
+        if self.broken:
+            return -666
+        
         try:
             if self.sensor.get_sensor_data():
                 return self.sensor.data.temperature
@@ -143,6 +154,10 @@ class BMESensor:
             return -666
 
     def getPressure(self):
+        
+        if self.broken:
+            return -666
+        
         try:
             if self.sensor.get_sensor_data():
                 return self.sensor.data.pressure * 100 
@@ -151,6 +166,9 @@ class BMESensor:
             return -666
 
     def getAlt(self):
+        if self.broken:
+            return -666
+        
         try:
             if self.sensor.get_sensor_data():
                 pressure = self.getPressure();
@@ -160,6 +178,9 @@ class BMESensor:
             return -666
     
     def test(self):
+        if self.broken:
+            return -666
+        
         if self.sensor.get_sensor_data():
             print("temp:", self.getTemp())
             print("pressure:", self.getPressure())
@@ -169,12 +190,17 @@ class BMESensor:
             
 class GPSSensor:
     def __init__(self):
+        self.broken = False
         try:
             gpsd.connect()
         except Exception as e:
+            self.broken = True
             print(f"Error connecting to GPSD: {e}")
     
     def getLat(self):
+        if self.broken:
+            return -666
+
         try:
             packet = gpsd.get_current()
             return packet.lat
@@ -183,6 +209,8 @@ class GPSSensor:
             return -666
 
     def getLong(self):
+        if self.broken:
+            return -666 
         try:
             packet = gpsd.get_current()
             return packet.lon
@@ -191,6 +219,9 @@ class GPSSensor:
             return -666
 
     def getAlt(self):
+        if self.broken:
+            return -666
+        
         try:
             packet = gpsd.get_current()
             return packet.alt
@@ -199,6 +230,8 @@ class GPSSensor:
             return -666
 
     def test(self):
+        if self.broken:
+            return
         print("Latitude:", self.getLat())
         print("Longitude:", self.getLong())
         print("Altitude:", self.getAlt())
