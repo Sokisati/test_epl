@@ -210,7 +210,7 @@ def run():
     if sys.argv[1]=='detach':
         testDetachment(normalServoPin,defaultAngle,detachmentAngle)
      
-    if sys.argv[1]=='360':
+    if str(sys.argv[1])=='360':
         testHackedServo(hackedServoPin)
       
         
