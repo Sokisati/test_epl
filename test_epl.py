@@ -508,30 +508,33 @@ def testGps():
     while True:
         sensorPack.gps.test()           
         time.sleep(1)
+        
 def testMpu():
     sensorPack = SensorPack();
 
     while True:
         sensorPack.mpu.test()
         time.sleep(1)
+        
 def testRtc():
     timeSensor = TimeSensor()
 
     while True:
         timeSensor.test()
         time.sleep(1)
+        
 def run():
     
     validateArguments();
 
-    inputPin = 27
-    outputPin = 23
+    inputPin = 22
+    outputPin = 27
 
-    normalServoPin = 18
+    normalServoPin = 12
     detachmentAngle = 25
     defaultAngle = 90
 
-    hackedServoPin = 18
+    hackedServoPin = 13
 
     if sys.argv[1]=='input':
         testInput(inputPin)
