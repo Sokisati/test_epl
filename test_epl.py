@@ -1,3 +1,4 @@
+from tkinter import W
 import RPi.GPIO as GPIO
 import time
 import sys
@@ -489,7 +490,33 @@ def testHackedServo(hackedServoPin):
 def testAllSensors():
     sensorPack = SensorPack();
 
-    sensorPack.test();
+    while True:
+        sensorPack.test();
+
+def testBme():
+    sensorPack = SensorPack();
+
+    while True:
+        sensorPack.bme.test()
+        
+def testGps():
+    
+    sensorPack = SensorPack();
+
+    while True:
+        sensorPack.gps.test()           
+
+def testMpu():
+    sensorPack = SensorPack();
+
+    while True:
+        sensorPack.mpu.test()
+
+def testRtc():
+    timeSensor = TimeSensor()
+
+    while True:
+        timeSensor.test()
 
 def run():
     
@@ -520,8 +547,19 @@ def run():
         testHackedServo(hackedServoPin)
 
     if sys.argv[1]=='all':
-        while True:
-            testAllSensors()
+        testAllSensors()
+
+    if sys.argv[1]=='bme':
+        testBme()
+    
+    if sys.argv[1]=='gps':
+        testGps()
+        
+    if sys.argv[1]=='rtc':
+        testRtc()
+        
+    if sys.argv[1]=='mpu':
+        testMpu()
       
         
 run();
