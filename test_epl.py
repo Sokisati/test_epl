@@ -513,7 +513,7 @@ def testMpu():
     sensorPack = SensorPack();
 
     while True:
-        sensorPack.mpu.test()
+        sensorPack.gyro.test()
         time.sleep(1)
         
 def testRtc():
