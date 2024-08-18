@@ -445,8 +445,10 @@ def testDetachment(normalServoPin,defaultAngle,detachmentAngle):
         time.sleep(2) 
         duty_cycle = angleToDutyCycle(detachmentAngle)
         pwm.ChangeDutyCycle(duty_cycle)
-        time.sleep(2) 
-
+        time.sleep(5) 
+        duty_cycle = angleToDutyCycle(defaultAngle)
+        pwm.ChangeDutyCycle(duty_cycle)
+        
     except KeyboardInterrupt:
         pass
 
@@ -562,8 +564,8 @@ def run():
     outputPin = 27
 
     normalServoPin = 12
-    detachmentAngle = 25
-    defaultAngle = 90
+    detachmentAngle = 30
+    defaultAngle = 15
 
     hackedServoPin = 13
 
