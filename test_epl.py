@@ -323,7 +323,7 @@ def validateArguments():
     if not len(sys.argv)==2:
         warnAndExit();
 
-    if sys.argv[1] not in ['360', 'detach', 'range', 'input', 'output', 'all', 'gps', 'bme', 'mpu', 'rtc']:
+    if sys.argv[1] not in ['360', 'detach', 'range', 'input', 'output', 'all', 'gps', 'bme', 'mpu', 'rtc','zero']:
         warnAndExit();
 
 def testInput(inputPin):
