@@ -564,8 +564,8 @@ def run():
     outputPin = 27
 
     normalServoPin = 12
-    detachmentAngle = 80
-    defaultAngle = 35
+    detachmentAngle = 85
+    defaultAngle = 40
 
     hackedServoPin = 13
 
