@@ -437,6 +437,7 @@ def testDetachment(normalServoPin,defaultAngle,detachmentAngle):
 
         duty_cycle = ((angle - min_angle) / (max_angle - min_angle)) * (max_duty_cycle - min_duty_cycle) + min_duty_cycle
         return duty_cycle
+    
 
     try:
         duty_cycle = angleToDutyCycle(defaultAngle)
@@ -523,6 +524,36 @@ def testRtc():
         timeSensor.test()
         time.sleep(1)
         
+def testToZero():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(normalServoPin, GPIO.OUT)
+
+    pwm = GPIO.PWM(normalServoPin, 50)  
+    pwm.start(0)            
+
+    def angleToDutyCycle(angle):
+        min_angle = 0
+        max_angle = 180
+        min_duty_cycle = 2
+        max_duty_cycle = 12
+    
+        if angle < min_angle:
+            angle = min_angle
+        elif angle > max_angle:
+            angle = max_angle
+
+        duty_cycle = ((angle - min_angle) / (max_angle - min_angle)) * (max_duty_cycle - min_duty_cycle) + min_duty_cycle
+        return duty_cycle
+    
+
+    try:
+        duty_cycle = angleToDutyCycle(0)
+        pwm.ChangeDutyCycle(duty_cycle)
+        time.sleep(1) 
+
+    except KeyboardInterrupt:
+        pass    
+        
 def run():
     
     validateArguments();
@@ -565,6 +596,9 @@ def run():
         
     if sys.argv[1]=='mpu':
         testMpu()
+        
+    if sys.argv[1]=='zero':
+        testToZero();
       
         
 run();
