@@ -524,7 +524,7 @@ def testRtc():
         timeSensor.test()
         time.sleep(1)
         
-def testToZero():
+def testToZero(normalServoPin):
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(normalServoPin, GPIO.OUT)
 
@@ -598,7 +598,7 @@ def run():
         testMpu()
         
     if sys.argv[1]=='zero':
-        testToZero();
+        testToZero(normalServoPin);
       
         
 run();
