@@ -446,6 +446,9 @@ def testDetachment(normalServoPin,defaultAngle,detachmentAngle):
         duty_cycle = angleToDutyCycle(detachmentAngle)
         pwm.ChangeDutyCycle(duty_cycle)
         time.sleep(2)
+        duty_cycle = angleToDutyCycle(defaultAngle)
+        pwm.ChangeDutyCycle(duty_cycle)
+        time.sleep(2)        
         
     except KeyboardInterrupt:
         pass
@@ -477,15 +480,12 @@ def testHackedServo(hackedServoPin):
     try:
         duty_cycle = angleToDutyCycle(130)
         pwm.ChangeDutyCycle(duty_cycle)
-        time.sleep(2)
-        duty_cycle = angleToDutyCycle(90)
-        pwm.ChangeDutyCycle(duty_cycle)
-        time.sleep(2)
+        time.sleep(3)
+        pwm.stop()
 
     except KeyboardInterrupt:
         pass
 
-    pwm.stop()
     GPIO.cleanup()    
     
 def testAllSensors():
