@@ -318,7 +318,7 @@ class Servo:
         factory = PiGPIOFactory();
         self.servoDetachmentAngle = servoDetachmentAngle
         self.servoDefaultAngle = servoDefaultAngle
-        self.servo = AngularServo(servoPin, min_pulse_width=0.0006, max_pulse_width=0.0023, pin_factory=factory);
+        self.servo = AngularServo(servoPin, min_pulse_width=0.0005, max_pulse_width=0.0024, pin_factory=factory);
         self.failedAttemptCounter=0;
     
     def detach(self):
