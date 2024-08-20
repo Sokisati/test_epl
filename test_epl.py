@@ -9,7 +9,8 @@ from mpu9250_jmdev.mpu_9250 import MPU9250
 import bme680
 import gpsd
 from datetime import datetime
-
+from gpiozero import AngularServo
+from gpiozero.pins.pigpio import PiGPIOFactory
 
 """
 look to the tree for sys. arguments
@@ -311,7 +312,28 @@ class SensorPack:
         print(f"Pitch: {self.sensorDataPack.pitch}")
         print(f"Yaw: {self.sensorDataPack.yaw}")
         print(f"Date and Time: {self.sensorDataPack.dateAndTime}")
-
+        
+class Servo:
+    def __init__(self,servoPin,servoDefaultAngle,servoDetachmentAngle):
+        factory = PiGPIOFactory();
+        self.servoDetachmentAngle = servoDetachmentAngle
+        self.servoDefaultAngle = servoDefaultAngle
+        self.servo = AngularServo(servoPin, min_pulse_width=0.0006, max_pulse_width=0.0023, pin_factory=factory);
+        self.failedAttemptCounter=0;
+    
+    def detach(self):
+        print("Servo detaching")
+        try:
+            self.servo.angle = self.servoDetachmentAngle
+        except Exception as e:
+            pass
+        
+    def lock(self):
+        print("Servo locking")
+        try:
+            self.servo.angle = self.servoDefaultAngle
+        except Exception as e:
+            pass
 
 
 def warnAndExit():
@@ -400,14 +422,14 @@ def testRange(normalServoPin):
             for angle in range(0, 181):  
                 duty_cycle = angleToDutyCycle(angle)
                 pwm.ChangeDutyCycle(duty_cycle)
-                time.sleep(0.02) 
+                time.sleep(0.01) 
 
             time.sleep(1)  
 
             for angle in range(180, -1, -1):  
                 duty_cycle = angleToDutyCycle(angle)
                 pwm.ChangeDutyCycle(duty_cycle)
-                time.sleep(0.02)  
+                time.sleep(0.01)  
 
             time.sleep(1)  
 
@@ -418,43 +440,15 @@ def testRange(normalServoPin):
     GPIO.cleanup()
 
 def testDetachment(normalServoPin,defaultAngle,detachmentAngle):
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(normalServoPin, GPIO.OUT)
-
-    pwm = GPIO.PWM(normalServoPin, 50)  
-    pwm.start(0)            
-
-    def angleToDutyCycle(angle):
-        min_angle = 0
-        max_angle = 180
-        min_duty_cycle = 2
-        max_duty_cycle = 12
+    testServo = Servo(normalServoPin,defaultAngle,detachmentAngle)
     
-        if angle < min_angle:
-            angle = min_angle
-        elif angle > max_angle:
-            angle = max_angle
-
-        duty_cycle = ((angle - min_angle) / (max_angle - min_angle)) * (max_duty_cycle - min_duty_cycle) + min_duty_cycle
-        return duty_cycle
+    testServo.lock()
+    time.sleep(2)
+    testServo.detach()
+    time.sleep(3)
+    testServo.lock()
+    time.sleep(1)
     
-
-    try:
-        duty_cycle = angleToDutyCycle(defaultAngle)
-        pwm.ChangeDutyCycle(duty_cycle)
-        time.sleep(2) 
-        duty_cycle = angleToDutyCycle(detachmentAngle)
-        pwm.ChangeDutyCycle(duty_cycle)
-        time.sleep(2)
-        duty_cycle = angleToDutyCycle(defaultAngle)
-        pwm.ChangeDutyCycle(duty_cycle)
-        time.sleep(2)        
-        
-    except KeyboardInterrupt:
-        pass
-
-    pwm.stop()
-    GPIO.cleanup()
 
 def testHackedServo(hackedServoPin):
     GPIO.setmode(GPIO.BCM)
